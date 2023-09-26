@@ -1,0 +1,87 @@
+#include <stdio.h>
+
+// Define a structure to represent a term in a polynomial
+struct Term {
+    int coefficient;
+    int exponent;
+};
+
+// Function to add two polynomials
+void addPolynomials(struct Term poly1[], int size1, struct Term poly2[], int size2, struct Term result[], int *sizeResult) {
+    int i = 0, j = 0, k = 0;
+
+    while (i < size1 && j < size2) {
+        if (poly1[i].exponent > poly2[j].exponent) {
+            result[k] = poly1[i];
+            i++;
+        } else if (poly1[i].exponent < poly2[j].exponent) {
+            result[k] = poly2[j];
+            j++;
+        } else {
+            result[k].exponent = poly1[i].exponent;
+            result[k].coefficient = poly1[i].coefficient + poly2[j].coefficient;
+            i++;
+            j++;
+        }
+        k++;
+    }
+
+    while (i < size1) {
+        result[k] = poly1[i];
+        i++;
+        k++;
+    }
+
+    while (j < size2) {
+        result[k] = poly2[j];
+        j++;
+        k++;
+    }
+
+    *sizeResult = k;
+}
+
+int main() {
+    int size1, size2, sizeResult;
+    
+    // Input the sizes of the two polynomials
+    printf("Enter the number of terms in the first polynomial: ");
+    scanf("%d", &size1);
+
+    printf("Enter the number of terms in the second polynomial: ");
+    scanf("%d", &size2);
+
+    struct Term poly1[size1], poly2[size2], result[size1 + size2];
+
+    // Input the first polynomial
+    printf("Enter the terms of the first polynomial:\n");
+    for (int i = 0; i < size1; i++) {
+        printf("Coefficient of term %d: ", i + 1);
+        scanf("%d", &poly1[i].coefficient);
+        printf("Exponent of term %d: ", i + 1);
+        scanf("%d", &poly1[i].exponent);
+    }
+
+    // Input the second polynomial
+    printf("Enter the terms of the second polynomial:\n");
+    for (int i = 0; i < size2; i++) {
+        printf("Coefficient of term %d: ", i + 1);
+        scanf("%d", &poly2[i].coefficient);
+        printf("Exponent of term %d: ", i + 1);
+        scanf("%d", &poly2[i].exponent);
+    }
+
+    // Add the two polynomials
+    addPolynomials(poly1, size1, poly2, size2, result, &sizeResult);
+
+    // Display the result
+    printf("Resultant Polynomial:\n");
+    for (int i = 0; i < sizeResult; i++) {
+        printf("%dx^%d ", result[i].coefficient, result[i].exponent);
+        if (i < sizeResult - 1) {
+            printf("+ ");
+        }
+    }
+
+    return 0;
+}
